@@ -1,0 +1,16 @@
+.container{
+    width: 20%;
+    float: none;
+    margin-top: 5%;
+    margin-left: auto;
+    margin-right: auto;
+    border: 10px;
+    border-style: solid;
+    border-color: black;
+    border-width: 10px;
+    padding: 10px;
+}
+h1{
+    float: none;
+    margin: auto;
+}
