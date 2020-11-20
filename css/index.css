@@ -1,5 +1,5 @@
 .container{
-    width: 20%;
+    width: 100%;
     float: none;
     margin-top: 5%;
     margin-left: auto;
@@ -8,9 +8,27 @@
     border-style: solid;
     border-color: black;
     border-width: 10px;
+    padding-bottom: 10px;
+    background-color: #DDDDDD;
+}
+
+img{
+    background-color: #FFFFFF;
+}
+
+.art-container{
+    float: none;
+    margin-left: auto;
+    margin-right: auto;
+    border: 2px;
     padding: 10px;
 }
+
 h1{
-    float: none;
-    margin: auto;
+    padding-top: 10px;
+    text-align: center;
+}
+h3{
+    padding-top: 10px;
+    text-align: center;
 }

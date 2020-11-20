@@ -16,19 +16,9 @@ import (
 
 var templates = template.Must(template.ParseFiles("templates/index.html"))
 
-// Key ...
-type Key struct {
-	KeyString string
-}
-
 // Image ...
 type Image struct {
-	Keys []Key
-}
-
-// AddKey ...
-func (image *Image) AddKey(key Key) {
-	image.Keys = append(image.Keys, key)
+	Key []string
 }
 
 func exitErrorf(msg string, args ...interface{}) {
@@ -46,7 +36,7 @@ func getEnvVariable(key string) string {
 	return os.Getenv(key)
 }
 
-func getImagesFromS3() Image {
+func getImagesFromS3() []string {
 	sess := session.Must(session.NewSession())
 
 	// Creating S3 client
@@ -58,33 +48,27 @@ func getImagesFromS3() Image {
 		fmt.Println(err)
 	}
 
-	imageList := Image{}
+	var imageList []string
 	for _, item := range response.Contents {
-		//fmt.Println(*item.Key)
-		imageList.AddKey(Key{KeyString: *item.Key})
-		//imageList.Keys = append(imageList.Keys, "https://"+getEnvVariable("AWS_BUCKET")+".s3.amazonaws.com/"+*item.Key)
+		imageList = append(imageList, "https://"+getEnvVariable("AWS_BUCKET")+".s3.amazonaws.com/"+*item.Key)
 	}
 
 	return imageList
 }
 
 func viewHandler(w http.ResponseWriter, r *http.Request) {
-	imageNames := getImagesFromS3()
-	err := templates.ExecuteTemplate(w, "index.html", imageNames)
+	imageRefs := getImagesFromS3()
+	err := templates.ExecuteTemplate(w, "index.html", imageRefs)
 	if err != nil {
-		// handle error
+		fmt.Println(err)
 	}
 }
 
 func main() {
-	// stuff := getImagesFromS3()
-	// for _, thing := range stuff.Keys {
-	// 	fmt.Println(thing)
-	// }
 
 	// register handler functions
 	http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("css"))))
-	http.HandleFunc("/home/", viewHandler)
+	http.HandleFunc("/", viewHandler)
 
 	fmt.Println("Listening on port " + getEnvVariable("APP_PORT"))
 	log.Fatal(http.ListenAndServe(":"+getEnvVariable("APP_PORT"), nil))
