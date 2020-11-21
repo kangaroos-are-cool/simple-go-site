@@ -1,2 +1,2 @@
 #!/bin/bash
-./server.exe
+go run server.go
